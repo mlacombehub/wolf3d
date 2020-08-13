@@ -6,7 +6,7 @@
 #    By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/12 14:31:24 by mlacombe          #+#    #+#              #
-#    Updated: 2020/08/12 15:50:45 by mlacombe         ###   ########.fr        #
+#    Updated: 2020/08/13 22:55:21 by mlacombe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME			=wolf3d
 
 # compiler
 CC				=gcc
-override CFLAGS	+=-Wall -Wextra -Werror
+override CFLAGS	+=-Wall -Wextra -g3
 PACKAGES		=pkg-config --cflags --libs sdl2
 OBJ				=$(addprefix $(OBJ_DIR),$(SRC:.c=.o))
 DEP				=$(addprefix $(OBJ_DIR),$(SRC:.c=.d))
@@ -60,11 +60,9 @@ norm:
 clean:
 	rm -rf $(OBJ_DIR)
 	$(MAKE) -C $(FT) clean
-	$(MAKE) -C $(MLX) clean
 
 fclean:
 	$(MAKE) -C $(FT) fclean
-	$(MAKE) -C $(MLX) clean
 	rm -rf $(OBJ_DIR) $(NAME)
 
 re:

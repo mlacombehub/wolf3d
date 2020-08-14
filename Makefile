@@ -6,7 +6,7 @@
 #    By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/12 14:31:24 by mlacombe          #+#    #+#              #
-#    Updated: 2020/08/13 22:55:21 by mlacombe         ###   ########.fr        #
+#    Updated: 2020/08/14 18:54:48 by mlacombe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,11 @@ OBJ				=$(addprefix $(OBJ_DIR),$(SRC:.c=.o))
 DEP				=$(addprefix $(OBJ_DIR),$(SRC:.c=.d))
 
 # files
-SRC				=main.c
+SRC				=	main.c				\
+					file_management.c	\
+					# engine.c			\
+					hook.c				\
+					player.c
 
 # directories
 SRC_DIR			=./srcs/

@@ -6,7 +6,7 @@
 #    By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 16:32:14 by mlacombe          #+#    #+#              #
-#    Updated: 2020/07/19 13:29:12 by mlacombe         ###   ########.fr        #
+#    Updated: 2020/08/16 16:55:07 by mlacombe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -116,7 +116,7 @@ $(OBJ_DIR):
 	mkdir -p $@
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
-	$(CC) -I $(INCLUDES) $(CFLAGS) -c -o $@ $<
+	$(CC) -I $(INCLUDES) $(CFLAGS) -MMD -c -o $@ $<
 
 $(NAME): $(OBJ)
 	$(AR) $(ARFLAGS) $@ $^

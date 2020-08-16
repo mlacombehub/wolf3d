@@ -1,17 +1,20 @@
 # I)	initialisation du programme
-#	A) 	vérification du paramètre en entrée
-		1) si le fichier n'existe pas ou qu'il y a plusieurs ou pas de fichier en paramètre, on ferme le programme
-#	B) 	création de la structure
-		1)  allocation de la structure wolf qui regroupe tous les parametres du wolf
+#	A)	vérification du paramètre en entrée
+	#	1) si le fichier n'existe pas ou qu'il y a plusieurs ou pas de fichier en paramètre, on ferme le programme
+#	B)	création de la structure
+	#	1)  allocation de la structure wolf qui regroupe tous les parametres du wolf
 		2)  initialisation des éléments de la structure
-        3)  ajout d'un pointeur map qui va récupérer la structure t_token_t:{unsigned:1 type(bloc/sprite), unsigned:1 crossable, unsigned:1 position, unsigned:1 pickable, unsigned:3 texture (pragma packed), '\0'}
+			- X ?
+			- Y ?
+			- Z ?
+	#	3)  ajout d'un pointeur map qui va récupérer la structure t_token_t:{unsigned:1 type(bloc/sprite), unsigned:1 crossable, unsigned:1 position, unsigned:1 pickable, unsigned:3 texture (pragma packed), '\0'}
 
 # II)	traitement du fichier envoyé en paramètre
 ** récupérer des sources de fdf
 #	A)	on ouvre le fichier
-		1)	on vérifie qu'il n'y ait pas de boucle infinie**
+	#	1)	on vérifie qu'il n'y ait pas de boucle infinie**
 #	B)	on lit le fichier
-		1)	on vérifie que la map est bien conforme**
+	$	1)	on vérifie que la map est bien conforme**
 #	C)	on stocke la taille de la map
 		1)	protection des maps trop grandes ou pleines
         2)  caster directement le contenu du token dans t_token_t

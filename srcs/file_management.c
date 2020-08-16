@@ -6,13 +6,13 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:34:47 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/16 18:39:25 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/16 20:44:33 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	wolf3d_countlines(t_wolf3d_t *wolf3d, char *str)
+void		wolf3d_countlines(t_wolf3d_t *wolf3d, char *str)
 {
 	wolf3d->nb_line = 0;
 	while (*str)
@@ -31,7 +31,7 @@ void	wolf3d_countlines(t_wolf3d_t *wolf3d, char *str)
 	}
 }
 
-void	wolf3d_countcolumns(t_wolf3d_t *wolf3d, char *str)
+void		wolf3d_countcolumns(t_wolf3d_t *wolf3d, char *str)
 {
 	uint32_t	i;
 
@@ -80,7 +80,7 @@ static char	*wolf3d_reallocfile(int fd)
 	return (result);
 }
 
-void	read_file(t_wolf3d_t *wolf3d, int fd)
+void		read_file(t_wolf3d_t *wolf3d, int fd)
 {
 	char		*raw_map;
 	t_point_t	p;
@@ -89,16 +89,16 @@ void	read_file(t_wolf3d_t *wolf3d, int fd)
 	p = (t_point_t) {0, 0};
 	wolf3d_countlines(wolf3d, raw_map);
 	wolf3d_countcolumns(wolf3d, raw_map);
-	printf("nb_line : %i\n", wolf3d->nb_line);
-	if(!(wolf3d->map = (t_token_t **)malloc(sizeof(*wolf3d->map) * wolf3d->nb_line)))
+	if (!(wolf3d->map = (t_token_t **)malloc(
+						sizeof(*wolf3d->map) * wolf3d->nb_line)))
 	{
 		free(wolf3d->map);
 		return ;
 	}
 	while (p.y < wolf3d->nb_line)
 	{
-		printf("\tline_len : %i\n", wolf3d->line_len[p.y]);
-		if (!(wolf3d->map[p.y] = (t_token_t *)malloc(sizeof(*wolf3d->map[p.y]) * (wolf3d->line_len[p.y] + 1))))
+		if (!(wolf3d->map[p.y] = (t_token_t *)malloc(sizeof(*wolf3d->map[p.y])
+								* (wolf3d->line_len[p.y] + 1))))
 		{
 			free(wolf3d->map[p.y]);
 			return ;
@@ -106,40 +106,39 @@ void	read_file(t_wolf3d_t *wolf3d, int fd)
 		while (*raw_map && *raw_map != '\n')
 		{
 			(*raw_map <= 47) ? (*raw_map += 127 - 47) : (*raw_map -= 47);
-			if (*raw_map >= 127 - 47)
-				printf("test : %i\n", *raw_map - 127 + 47);
-			// wolf3d->map[p.y][p.x].type = ;
-			// wolf3d->map[p.y][p.x].crossable = ;
-			// wolf3d->map[p.y][p.x].position = ;
-			// wolf3d->map[p.y][p.x].pickable = ;
-			// wolf3d->map[p.y][p.x].texture_A = ;
-			// wolf3d->map[p.y][p.x].texture_B = ;
-			// wolf3d->map[p.y][p.x].texture_C = ;
-			// wolf3d->map[p.y][p.x].ending = 0;
+			wolf3d->map[p.y][p.x] = (*(t_token_t *)raw_map);
+			printf("%c", wolf3d->map[p.y][p.x]);
+			// wolf3d->map[p.y][p.x] = (t_token_t){(*raw_map & (1 << 0)) >> 0,
+			// 	(*raw_map & (1 << 1)) >> 1, (*raw_map & (1 << 2)) >> 2,
+			// 	(*raw_map & (1 << 3)) >> 3, (*raw_map & (1 << 4)) >> 4,
+			// 	(*raw_map & (1 << 5)) >> 5, (*raw_map & (1 << 6)) >> 6, 0};
 			++raw_map;
 			++p.x;
 		}
 		if (*raw_map && *raw_map == '\n')
 		{
+			printf("\n");
 			p.x = 0;
 			++p.y;
 			++raw_map;
 		}
+		if (*raw_map == '\0')
+			break ;
 	}
 }
 
-void	manage_file(int ac, t_wolf3d_t *wolf3d)
+void		manage_file(int ac, t_wolf3d_t *wolf3d)
 {
 	int	fd;
 
 	fd = 0;
-	ft_puterror((ac > 2 || (fd = open(wolf3d->fname, O_RDONLY)) == -1), "usage : ./wolf3d [input_file]");
+	ft_puterror((ac > 2 || (fd = open(wolf3d->fname, O_RDONLY)) == -1),
+				"usage : ./wolf3d [input_file]");
 	if (ac != 1)
 		ft_open_close_fd(wolf3d->fname) == FALSE ? free_quit(wolf3d) : 42;
 	if (read(fd, NULL, 0) == -1)
 		free_quit(wolf3d);
 	read_file(wolf3d, fd);
 	ft_puterror(close(fd) < 0, "Problem with closing file");
-	// stock_map_length();
 	// bit_verification();
 }

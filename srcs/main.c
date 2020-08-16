@@ -6,15 +6,15 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:31:11 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/16 17:59:13 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/16 18:59:10 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	init_structure(t_wolf3d_t *wolf3d, t_token_t **map)
+void	init_structure(t_wolf3d_t *wolf3d)
 {
-	if(!(wolf3d = (t_wolf3d_t *)malloc(sizeof(t_wolf3d_t))))
+	if (!(wolf3d = (t_wolf3d_t *)malloc(sizeof(t_wolf3d_t))))
 	{
 		free(wolf3d);
 		return ;
@@ -31,7 +31,7 @@ void	init_program(int ac, char **av, t_wolf3d_t *wolf3d)
 	else
 		ft_puterror(ac != 2, "Usage : ./wolf3d [input_file]");
 	wolf3d->fname = av[1];
-	init_structure(wolf3d, wolf3d->map);
+	init_structure(wolf3d);
 }
 
 void	free_quit(t_wolf3d_t *wolf3d)

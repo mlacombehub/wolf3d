@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:34:47 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/16 20:44:33 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/16 20:48:40 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ void		read_file(t_wolf3d_t *wolf3d, int fd)
 		{
 			(*raw_map <= 47) ? (*raw_map += 127 - 47) : (*raw_map -= 47);
 			wolf3d->map[p.y][p.x] = (*(t_token_t *)raw_map);
-			printf("%c", wolf3d->map[p.y][p.x]);
 			// wolf3d->map[p.y][p.x] = (t_token_t){(*raw_map & (1 << 0)) >> 0,
 			// 	(*raw_map & (1 << 1)) >> 1, (*raw_map & (1 << 2)) >> 2,
 			// 	(*raw_map & (1 << 3)) >> 3, (*raw_map & (1 << 4)) >> 4,
@@ -117,7 +116,6 @@ void		read_file(t_wolf3d_t *wolf3d, int fd)
 		}
 		if (*raw_map && *raw_map == '\n')
 		{
-			printf("\n");
 			p.x = 0;
 			++p.y;
 			++raw_map;

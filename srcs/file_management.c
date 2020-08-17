@@ -6,11 +6,12 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:34:47 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/16 20:48:40 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/17 18:56:12 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
 
 void		wolf3d_countlines(t_wolf3d_t *wolf3d, char *str)
 {
@@ -80,7 +81,7 @@ static char	*wolf3d_reallocfile(int fd)
 	return (result);
 }
 
-void		read_file(t_wolf3d_t *wolf3d, int fd)
+void	read_file(t_wolf3d_t *wolf3d, int fd)
 {
 	char		*raw_map;
 	t_point_t	p;
@@ -105,17 +106,14 @@ void		read_file(t_wolf3d_t *wolf3d, int fd)
 		}
 		while (*raw_map && *raw_map != '\n')
 		{
-			(*raw_map <= 47) ? (*raw_map += 127 - 47) : (*raw_map -= 47);
-			wolf3d->map[p.y][p.x] = (*(t_token_t *)raw_map);
-			// wolf3d->map[p.y][p.x] = (t_token_t){(*raw_map & (1 << 0)) >> 0,
-			// 	(*raw_map & (1 << 1)) >> 1, (*raw_map & (1 << 2)) >> 2,
-			// 	(*raw_map & (1 << 3)) >> 3, (*raw_map & (1 << 4)) >> 4,
-			// 	(*raw_map & (1 << 5)) >> 5, (*raw_map & (1 << 6)) >> 6, 0};
+			wolf3d->map[p.y][p.x] = *(t_token_t *)raw_map;
+			// printf("%i%i%i%i%i%i%i%i\n", wolf3d->map[p.y][p.x].type, wolf3d->map[p.y][p.x].crossable, wolf3d->map[p.y][p.x].origin, wolf3d->map[p.y][p.x].pickable, wolf3d->map[p.y][p.x].texture_a, wolf3d->map[p.y][p.x].texture_b, wolf3d->map[p.y][p.x].texture_c, wolf3d->map[p.y][p.x].ending);
 			++raw_map;
 			++p.x;
 		}
 		if (*raw_map && *raw_map == '\n')
 		{
+			// printf("\n");
 			p.x = 0;
 			++p.y;
 			++raw_map;
@@ -123,6 +121,41 @@ void		read_file(t_wolf3d_t *wolf3d, int fd)
 		if (*raw_map == '\0')
 			break ;
 	}
+}
+
+void		pos_origin(t_wolf3d_t *wolf3d, t_token_t **tok)
+{
+	t_point_t	p;
+
+	p = (t_point_t){-1, -1};
+	wolf3d->origin = (t_vec2_t){p.x, p.y};
+	wolf3d->view = (t_vec2_t){p.x, p.y};
+	while(++p.y < wolf3d->nb_line)
+	{
+		p.x = -1;
+		while(++p.x <= wolf3d->line_len[p.y])
+			if (tok[p.y][p.x].origin == 1 && tok[p.y][p.x].pickable == 0)
+				wolf3d->origin = (t_vec2_t){p.x, p.y};
+			else if (tok[p.y][p.x].origin == 1 && tok[p.y][p.x].pickable == 1)
+				wolf3d->view = (t_vec2_t){p.x, p.y};
+	}
+	if (wolf3d->origin.x == -1 || wolf3d->view.x == -1)
+	{
+		p = (t_point_t){p.y, wolf3d->line_len[p.y]};
+		while (tok[p.y][p.x].crossable == 0)
+		{
+			if (wolf3d->origin.x == -1)
+				wolf3d->origin = (t_vec2_t){p.x, p.y};
+			else if (wolf3d->view.x == -1)
+				wolf3d->view = (t_vec2_t){p.x, p.y};
+			p.x == 0 ? p.x == wolf3d->line_len[--p.y] : p.x--;
+		}
+	}
+	if (wolf3d->origin.x == wolf3d->view.x && wolf3d->origin.y == wolf3d->view.y)
+	{
+		
+	}
+	printf("origin : %.0f %.0f\nview : %.0f %.0f\n", wolf3d->origin.x, wolf3d->origin.y, wolf3d->view.x, wolf3d->view.y);
 }
 
 void		manage_file(int ac, t_wolf3d_t *wolf3d)
@@ -138,5 +171,5 @@ void		manage_file(int ac, t_wolf3d_t *wolf3d)
 		free_quit(wolf3d);
 	read_file(wolf3d, fd);
 	ft_puterror(close(fd) < 0, "Problem with closing file");
-	// bit_verification();
+	pos_origin(wolf3d, wolf3d->map);
 }

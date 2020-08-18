@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:32:10 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/17 18:01:12 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/18 18:50:43 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <math.h>
 
 typedef struct s_vec2
 {
@@ -47,7 +48,7 @@ typedef struct	s_wolf3d
 	char		*fname;
 	t_token_t	**map;
 	t_vec2_t	origin;
-	t_vec2_t	view;
+	double		angle_view;
 	int			fov;
 	int			nb_line;
 	int			*line_len;

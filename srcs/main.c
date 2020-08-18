@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:31:11 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/17 15:19:04 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/18 18:15:56 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@ int		main(int ac, char **av)
 {
 	t_wolf3d_t	wolf3d;
 
-	printf("test A\n\n");
+	printf("test A\n");
 	init_program(ac, av, &wolf3d);
-	printf("test B\n\n");
+	printf("\ntest B\n");
 	manage_file(ac, &wolf3d);
-	printf("test C\n\n");
+	printf("\ntest C\n");
 	ft_putendl(wolf3d.fname);
 	// player_pos(&wolf3d);
 	// manage_sdl(&wolf3d);

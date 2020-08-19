@@ -21,14 +21,14 @@
 #		1)	si bit position n'est pas présent on considère le dernier crossable disponible
 #		2)  si le vecteur position n'est pas défini, on le place vers la face nord.
 #		3)	s'il y a plusieurs position joueur ou vecteur direction, on récupère la dernière position connue
-		4)	on stocke les positions et rotation (angle vecteur direction et horizontale) du joueur dans la structure wolf3d
-        5)  on décale de +0,5 bloc pour mettre au centre l'origine
+#		4)	on stocke les positions et rotation (angle vecteur direction et horizontale) du joueur dans la structure wolf3d
+#		5)  on décale de +0,5 bloc pour mettre au centre l'origine
 
 # III)	calcul de la position du personnage dans l'espace
-	A)	on définit le FOV
-        1)  on alloue un tableau de la taille du nombre de pixels sur la fenêtre (en float llf)
-        1)  on calcule les angles des rayons de raycasting
-            a)  on utilise le nombre de pixels de l'image et le FOV pour définir l'angle de chaque rayon
+#	A)	on définit le FOV
+#		1)  on alloue un tableau de la taille du nombre de pixels sur la fenêtre (en float llf)
+#		2)  on calcule les angles des rayons de raycasting
+#            a)  on utilise le nombre de pixels de l'image et le FOV pour définir l'angle de chaque rayon
 	B)	on initie la hauteur du personnage a 70% de la hauteur des murs (axe Z), on le déplacera dans l'axe du vecteur de direction
 
 # IV)	lancer l'ouverture de la fenetre

@@ -6,19 +6,23 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:32:10 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/18 18:50:43 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/19 18:51:34 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef WOLF3D_H
 # define WOLF3D_H
 
-# define BUFF_FILE  4094
 # include "libft.h"
 # include <fcntl.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <math.h>
+# include <SDL.h>
+# include <SDL_ttf.h>
+# include <SDL_image.h>
+
+# define BUFF_FILE  4094
 
 typedef struct s_vec2
 {
@@ -43,13 +47,22 @@ typedef struct	s_token
 
 # pragma pack(pop)
 
+typedef struct	s_screen
+{
+	int	w;
+	int	h;
+}				t_screen_t;
+
+
 typedef struct	s_wolf3d
 {
 	char		*fname;
+	t_screen_t	screen;
 	t_token_t	**map;
 	t_vec2_t	origin;
 	double		angle_view;
-	int			fov;
+	long double	*picture;
+	double		fov;
 	int			nb_line;
 	int			*line_len;
 	int			max_len;
@@ -59,7 +72,7 @@ void			free_quit(t_wolf3d_t *wolf3d);
 
 void			manage_file(int ac, t_wolf3d_t *wolf3d);
 
-// void	player_pos(t_wolf3d_t *wolf3d);
+void			player_pos(t_wolf3d_t *wolf3d);
 
 // void	manage_sdl(t_wolf3d_t *wolf3d);
 // void	rendering(t_wolf3d_t *wolf3d);

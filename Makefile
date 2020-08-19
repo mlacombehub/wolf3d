@@ -6,7 +6,7 @@
 #    By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/12 14:31:24 by mlacombe          #+#    #+#              #
-#    Updated: 2020/08/14 18:54:48 by mlacombe         ###   ########.fr        #
+#    Updated: 2020/08/19 18:56:08 by mlacombe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,20 +16,22 @@ NAME			=wolf3d
 # compiler
 CC				=gcc
 override CFLAGS	+=-Wall -Wextra -g3
-PACKAGES		=pkg-config --cflags --libs sdl2
 OBJ				=$(addprefix $(OBJ_DIR),$(SRC:.c=.o))
 DEP				=$(addprefix $(OBJ_DIR),$(SRC:.c=.d))
+FRAMEWORK		= SDL2 SDL2_ttf SDL2_image
+FRAMEWORK_PATH	= frameworks
+INCLUDE			=$(INC_DIR:%=-I %) $(FRAMEWORK:%=-I $(FRAMEWORK_PATH)/%.framework/Headers/)
 
 # files
 SRC				=	main.c				\
 					file_management.c	\
+					player.c			\
 					# engine.c			\
 					hook.c				\
-					player.c
 
 # directories
 SRC_DIR			=./srcs/
-INC_DIR			=./includes/
+INC_DIR			=./includes/ /usr/include/SDL2
 OBJ_DIR			=./objects/
 
 # ft library
@@ -38,14 +40,24 @@ FT_LIB			=$(addprefix $(FT),libft.a)
 FT_INC			=-I ./libft/includes
 FT_LNK			=-L ./libft -l ft
 
+ifeq ($(shell uname 2>/dev/null),Darwin) # Mac OS X
+	LIB := -rpath @loader_path/$(FRAMEWORK_PATH) $(addprefix -framework ,$(FRAMEWORK)) $(FRAMEWORK_PATH:%=-F %) -lm
+endif
+ifeq ($(shell uname 2>/dev/null),Linux) # LINUX
+	LIB := $(addprefix -l,$(FRAMEWORK)) -lm
+endif
+
 all:
 	$(MAKE) $(NAME)
 
+$(NAME): $(OBJ)
+	@echo "is ok"
+	$(CC) $(CFLAGS) $(FT_INC) $(INCLUDE) $(FT_LNK) $(NAME) -o $@ $(LIB)
 -include $(DEP)
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 	mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(MLX_INC) $(FT_INC) -I $(INC_DIR) -MMD -o $@ -c $<
+	$(CC) $(CFLAGS) $(FT_INC) $(INCLUDE) -MMD -c $< -o $@
 
 $(FT_LIB): FORCE
 	$(MAKE) -C $(FT)
@@ -53,12 +65,9 @@ $(FT_LIB): FORCE
 $(MLX_LIB):
 	$(MAKE) -C $(MLX)
 
-$(NAME): $(OBJ) $(FT_LIB) $(MLX_LIB)
-	$(CC) $(CFLAGS) $(OBJ) $(MLX_LNK) $(FT_LNK) -MMD -lm -o $(NAME)
-
 norm:
 	norminette ./srcs/*
-	norminette ./includes/*
+	norminette ./includes/*.h
 	$(MAKE) CFLAGS+= -Wpadded
 
 clean:

@@ -6,7 +6,7 @@
 #    By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/12 14:31:24 by mlacombe          #+#    #+#              #
-#    Updated: 2020/08/19 18:56:08 by mlacombe         ###   ########.fr        #
+#    Updated: 2020/08/20 14:09:42 by mlacombe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,8 @@ INCLUDE			=$(INC_DIR:%=-I %) $(FRAMEWORK:%=-I $(FRAMEWORK_PATH)/%.framework/Head
 SRC				=	main.c				\
 					file_management.c	\
 					player.c			\
-					# engine.c			\
-					hook.c				\
+					engine.c			\
+					# hook.c				\
 
 # directories
 SRC_DIR			=./srcs/
@@ -50,9 +50,9 @@ endif
 all:
 	$(MAKE) $(NAME)
 
-$(NAME): $(OBJ)
-	@echo "is ok"
-	$(CC) $(CFLAGS) $(FT_INC) $(INCLUDE) $(FT_LNK) $(NAME) -o $@ $(LIB)
+$(NAME): $(OBJ) $(FT_LIB)
+	$(CC) $(CFLAGS) $(INCLUDE) $(FT_LNK) $(OBJ) -o $@ $(LIB)
+
 -include $(DEP)
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c
@@ -61,9 +61,6 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 
 $(FT_LIB): FORCE
 	$(MAKE) -C $(FT)
-
-$(MLX_LIB):
-	$(MAKE) -C $(MLX)
 
 norm:
 	norminette ./srcs/*

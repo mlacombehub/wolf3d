@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:34:47 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/19 16:29:08 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/20 18:38:56 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 void		wolf3d_countlines(t_wolf3d_t *wolf3d, char *str)
 {
-	wolf3d->nb_line = 0;
+	wolf3d->file.nb_line = 0;
 	while (*str)
 	{
 		if (*str == '\n')
-			wolf3d->nb_line++;
+			wolf3d->file.nb_line++;
 		str++;
 	}
 	if (*--str && !ft_isspace(*str) && *str != '\n')
-		wolf3d->nb_line++;
-	if (!(wolf3d->line_len = (int *)malloc(
-		sizeof(*wolf3d->line_len) * (wolf3d->nb_line + 1))))
+		wolf3d->file.nb_line++;
+	if (!(wolf3d->file.line_len = (int *)malloc(
+		sizeof(*wolf3d->file.line_len) * (wolf3d->file.nb_line + 1))))
 	{
-		free(wolf3d->line_len);
+		free(wolf3d->file.line_len);
 		return ;
 	}
 }
@@ -36,18 +36,18 @@ void		wolf3d_countcolumns(t_wolf3d_t *wolf3d, char *str)
 	uint32_t	i;
 
 	i = 0;
-	wolf3d->line_len[i] = 0;
+	wolf3d->file.line_len[i] = 0;
 	while (*str)
 	{
 		while (*str && *str != '\n')
 		{
-			wolf3d->line_len[i]++;
+			wolf3d->file.line_len[i]++;
 			str++;
 		}
 		if ((*str && *str == '\n') || (!*str && *--str != '\n'))
 		{
-			wolf3d->max_len = ft_max(wolf3d->line_len[i], wolf3d->max_len);
-			wolf3d->line_len[++i] ? wolf3d->line_len[i] = 0 : 42;
+			wolf3d->file.max_len = ft_max(wolf3d->file.line_len[i], wolf3d->file.max_len);
+			wolf3d->file.line_len[++i] ? wolf3d->file.line_len[i] = 0 : 42;
 		}
 		str++;
 	}
@@ -90,15 +90,15 @@ void		read_file(t_wolf3d_t *wolf3d, int fd)
 	wolf3d_countlines(wolf3d, raw_map);
 	wolf3d_countcolumns(wolf3d, raw_map);
 	if (!(wolf3d->map = (t_token_t **)malloc(
-						sizeof(*wolf3d->map) * wolf3d->nb_line)))
+						sizeof(*wolf3d->map) * wolf3d->file.nb_line)))
 	{
 		free(wolf3d->map);
 		return ;
 	}
-	while (p.y < wolf3d->nb_line)
+	while (p.y < wolf3d->file.nb_line)
 	{
 		if (!(wolf3d->map[p.y] = (t_token_t *)malloc(sizeof(*wolf3d->map[p.y])
-								* (wolf3d->line_len[p.y] + 1))))
+								* (wolf3d->file.line_len[p.y] + 1))))
 		{
 			free(wolf3d->map[p.y]);
 			return ;
@@ -106,13 +106,13 @@ void		read_file(t_wolf3d_t *wolf3d, int fd)
 		while (*raw_map && *raw_map != '\n')
 		{
 			wolf3d->map[p.y][p.x] = *(t_token_t *)raw_map;
-			printf("%i%i%i%i%i%i%i%i\n", wolf3d->map[p.y][p.x].type, wolf3d->map[p.y][p.x].crossable, wolf3d->map[p.y][p.x].origin, wolf3d->map[p.y][p.x].pickable, wolf3d->map[p.y][p.x].texture_a, wolf3d->map[p.y][p.x].texture_b, wolf3d->map[p.y][p.x].texture_c, wolf3d->map[p.y][p.x].ending);
+			// printf("%i%i%i%i%i%i%i%i\n", wolf3d->map[p.y][p.x].type, wolf3d->map[p.y][p.x].crossable, wolf3d->map[p.y][p.x].origin, wolf3d->map[p.y][p.x].pickable, wolf3d->map[p.y][p.x].texture_a, wolf3d->map[p.y][p.x].texture_b, wolf3d->map[p.y][p.x].texture_c, wolf3d->map[p.y][p.x].ending);
 			++raw_map;
 			++p.x;
 		}
 		if (*raw_map && *raw_map == '\n')
 		{
-			printf("\n");
+			// printf("\n");
 			p.x = 0;
 			++p.y;
 			++raw_map;

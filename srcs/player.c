@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:38:24 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/19 16:37:21 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/20 15:57:49 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ double		angle_view(t_vec2_t origin, t_point_t view)
 
 	ab = (t_point_t){0, -origin.y};
 	ac = (t_point_t){view.x - origin.x, view.y - origin.y};
-	result = acos((ab.x * ac.x + ab.y * ac.y) / (sqrt(ab.x * ab.x + ab.y * ab.y) * sqrt(ac.x * ac.x + ac.y * ac.y)));
+	result = acos((ab.x * ac.x + ab.y * ac.y)
+			/ (sqrt(ab.x * ab.x + ab.y * ab.y)
+			* sqrt(ac.x * ac.x + ac.y * ac.y)));
 	return (result);
 }
 
@@ -55,10 +57,12 @@ void		pos_origin(t_wolf3d_t *wolf3d, t_token_t **tok)
 				view = (t_point_t){wolf3d->origin.x, wolf3d->origin.y};
 			p.x == 0 ? p.x == wolf3d->line_len[--p.y] : p.x--;
 		}
+		ft_puterror(p.y == -1, "File is not containing crossable fields\n");
 	}
 	if (wolf3d->origin.x == view.x && wolf3d->origin.y == view.y)
 		view.y -= 0.5;
 	wolf3d->angle_view = angle_view(wolf3d->origin, view);
+	printf("%f %f\n", wolf3d->origin.x, wolf3d->origin.y);
 	wolf3d->origin = (t_vec2_t){wolf3d->origin.x + 0.5, wolf3d->origin.y + 0.5};
 }
 

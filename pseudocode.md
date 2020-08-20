@@ -33,6 +33,9 @@
 
 # IV)	lancer l'ouverture de la fenetre
 	A)	initialisation de la sdl
+		1)	creation du pointeur de fenetre
+		2)	création du pointeur de rendu
+		
 	B)	création d'une image SDL
 	C)	création de la fenêtre
 

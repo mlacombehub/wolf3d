@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:32:10 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/20 18:39:09 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/20 18:48:39 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ void	manage_file(int ac, t_wolf3d_t *wolf3d);
 
 void	player_pos(t_wolf3d_t *wolf3d);
 
-void	manage_sdl(t_wolf3d_t *wolf3d);
-// void	rendering(t_wolf3d_t *wolf3d);
+void	manage_sdl_init(t_wolf3d_t *wolf3d);
+void	rendering(t_wolf3d_t *wolf3d);
 
 // void	hook(t_wolf3d_t *wolf3d);
 

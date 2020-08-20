@@ -32,23 +32,20 @@
 	B)	on initie la hauteur du personnage a 70% de la hauteur des murs (axe Z), on le déplacera dans l'axe du vecteur de direction
 
 # IV)	lancer l'ouverture de la fenetre
-	A)	initialisation de la sdl
-		1)	creation du pointeur de fenetre
-		2)	création du pointeur de rendu
-		
-	B)	création d'une image SDL
-	C)	création de la fenêtre
+#	A)	initialisation de sdl
+#	B)	création d'un pointeur pour la SDL
+#	C)	création d'un pointeur pour la fenêtre
 
 # V)	affichage du rendu
-    A)	on calcule le rendu de l'image a raycast
+	A)	on calcule le rendu de l'image a raycast
 		1)	Pour chaque rayon à caster
 			- on envoie le rayon depuis la position du personnage dans la direction de rotation du joueur + valeur de l'angle du rayon
 			- pour chaque rayon, on calcule une distance
 		2)	on passe au rayon suivant
-    B) put image to window
+	B) put image to window
 
 # VI)     Gestion des events
 	A)	ESC ou croix = sortie du programme
 	B)	les fleches UP/DOWN et W/S font avancer/reculer le personnage
-        1)  le personnage ne peut se déplacer que si le point de destination est valide et qu'il n'est pas trop proche d'un mur
+		1)  le personnage ne peut se déplacer que si le point de destination est valide et qu'il n'est pas trop proche d'un mur
 	C)	les flèches LEFT/RIGHT A/D font tourner le personnage

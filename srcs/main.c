@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:31:11 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/20 15:43:10 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/20 18:48:17 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ int		main(int ac, char **av)
 	printf("\ntest C\n");
 	player_pos(&wolf3d);
 	printf("\ntest D\n");
-	manage_sdl(&wolf3d);
+	manage_sdl_init(&wolf3d);
 	printf("\ntest E\n");
-	// rendering(&wolf3d);
+	rendering(&wolf3d);
 	// printf("\ntest F\n");
 	// hook(&wolf3d);
 	// printf("\ntest G\n");

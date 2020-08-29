@@ -6,13 +6,13 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:38:24 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/20 15:57:49 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/29 20:37:01 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-double		angle_view(t_vec2_t origin, t_point_t view)
+double	angle_view(t_vec2_t origin, t_point_t view)
 {
 	t_point_t	ab;
 	t_point_t	ac;
@@ -26,64 +26,66 @@ double		angle_view(t_vec2_t origin, t_point_t view)
 	return (result);
 }
 
-void		pos_origin(t_wolf3d_t *wolf3d, t_token_t **tok)
+void	pos_origin(t_wolf3d_t *w, t_token_t **tok)
 {
 	t_point_t	p;
 	t_point_t	view;
 
 	p = (t_point_t){-1, -1};
-	wolf3d->origin = (t_vec2_t){p.x, p.y};
 	view = p;
-	while (++p.y < wolf3d->nb_line)
+	while (++p.y < w->file.nb_line)
 	{
 		p.x = -1;
-		while (++p.x <= wolf3d->line_len[p.y])
-			if (tok[p.y][p.x].origin && tok[p.y][p.x].crossable)
+		while (++p.x <= w->file.line_len[p.y])
+			if (tok[p.y][p.x].orig && tok[p.y][p.x].cross)
 			{
-				wolf3d->origin = (t_vec2_t){p.x, p.y};
-				tok[p.y][p.x].origin = 0;
+				w->origin = (t_vec2_t){p.x, p.y};
+				tok[p.y][p.x].orig = 0;
 			}
-			else if (tok[p.y][p.x].origin && !tok[p.y][p.x].crossable)
+			else if (tok[p.y][p.x].orig && !tok[p.y][p.x].cross)
 				view = p;
 	}
-	if (wolf3d->origin.x == -1 || view.x == -1)
+	if (w->origin.x == -1 || view.x == -1)
 	{
-		p = (t_point_t){wolf3d->line_len[p.y - 1] - 1, p.y - 1};
-		while (p.x >= 0 && p.y >= 0 && !tok[p.y][p.x].crossable)
+		p = (t_point_t){w->file.line_len[p.y - 1] - 1, p.y - 1};
+		while (p.x >= 0 && p.y >= 0 && !tok[p.y][p.x].cross)
 		{
-			if (wolf3d->origin.x == -1)
-				wolf3d->origin = (t_vec2_t){p.x, p.y};
+			if (w->origin.x == -1)
+				w->origin = (t_vec2_t){p.x, p.y};
 			else if (view.x == -1)
-				view = (t_point_t){wolf3d->origin.x, wolf3d->origin.y};
-			p.x == 0 ? p.x == wolf3d->line_len[--p.y] : p.x--;
+				view = (t_point_t){w->origin.x, w->origin.y};
+			p.x == 0 ? p.x == w->file.line_len[--p.y] : p.x--;
 		}
-		ft_puterror(p.y == -1, "File is not containing crossable fields\n");
+		if (p.y == -1)
+		{
+			ft_putendl_fd("File is not containing crossable fields\n", 2);
+			w->quit = 8;
+			return ;
+		}
 	}
-	if (wolf3d->origin.x == view.x && wolf3d->origin.y == view.y)
+	if (w->origin.x == view.x && w->origin.y == view.y)
 		view.y -= 0.5;
-	wolf3d->angle_view = angle_view(wolf3d->origin, view);
-	printf("%f %f\n", wolf3d->origin.x, wolf3d->origin.y);
-	wolf3d->origin = (t_vec2_t){wolf3d->origin.x + 0.5, wolf3d->origin.y + 0.5};
+	w->angle_view = angle_view(w->origin, view);
 }
 
-void	player_pos(t_wolf3d_t *wolf3d)
+void	player_pos(t_wolf3d_t *w)
 {
 	int		i;
 
-	pos_origin(wolf3d, wolf3d->map);
-	wolf3d->screen.w = 100;
-	wolf3d->fov = 2 * tan(M_PI / 3) / wolf3d->screen.w;
-	printf("fov: %f\n", wolf3d->fov);
-	if (!(wolf3d->picture = (long double *)malloc(sizeof(long double)
-							* wolf3d->screen.w)))
+	pos_origin(w, w->map);
+	w->origin = (t_vec2_t){w->origin.x + 0.5, w->origin.y + 0.5};
+	w->pos = w->origin;
+	if (w->quit != 0)
+		return ;
+	w->fov = 2 * tan(M_PI / 3) / w->screen.mode.w;
+	if (!(w->picture = (long double *)malloc(sizeof(long double)
+						* w->screen.mode.w)))
 	{
-		free(wolf3d->picture);
+		free(w->picture);
+		w->quit = 9;
 		return ;
 	}
 	i = -1;
-	while (++i < wolf3d->screen.w)
-	{
-		wolf3d->picture[i] = atan((i - wolf3d->screen.w) * wolf3d->fov);
-		printf("%Lf\n", wolf3d->picture[i]);
-	}
+	while (++i < w->screen.mode.w)
+		w->picture[i] = atan((i - w->screen.mode.w / 2) * w->fov);
 }

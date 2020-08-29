@@ -6,7 +6,7 @@
 #    By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/12 14:31:24 by mlacombe          #+#    #+#              #
-#    Updated: 2020/08/20 14:09:42 by mlacombe         ###   ########.fr        #
+#    Updated: 2020/08/28 15:02:11 by mlacombe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ SRC				=	main.c				\
 					file_management.c	\
 					player.c			\
 					engine.c			\
-					# hook.c				\
+					raycaster.c			\
+					hook.c
 
 # directories
 SRC_DIR			=./srcs/

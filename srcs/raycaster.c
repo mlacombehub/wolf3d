@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/23 16:10:50 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/29 15:20:37 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/01 14:54:57 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,16 +85,31 @@ void	raylaunch(t_wolf3d_t *w, double angle)
 	w->ray.offset -= floor(w->ray.offset);
 }
 
+void	spritecast(t_wolf3d_t *w)
+{
+	t_point_t	i;
+
+	i = (t_point_t){-1, -1};
+	while (i.y < w->ray.dist)
+	{
+		;
+	}
+}
+
 void	raycaster(t_wolf3d_t *w)
 {
 	int			i;
 	double		wall_h;
+	double		objects_h;
 
 	i = -1;
 	while (++i < w->screen.mode.w)
 	{
 		raylaunch(w, w->picture[i] + w->angle_view - M_PI / 2);
 		wall_h = w->screen.mode.w / 1.6 / 4 / w->ray.dist / cos(w->picture[i]);
+		// spritecast(w);
+		objects_h = w->screen.mode.w / 1.6 / 4 / w->ray.dist / cos(w->picture[i]);
 		draw_texture(w, (SDL_Point){i, wall_h});
+		draw_objects(w, (SDL_Point){i, objects_h}, w->ray.orient);
 	}
 }

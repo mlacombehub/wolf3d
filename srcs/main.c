@@ -6,14 +6,21 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:31:11 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/31 16:58:28 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/01 12:29:18 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	init_program(int ac, char **av, t_wolf3d_t *wolf3d)
+t_wolf3d_t	init_program(int ac, char **av, t_wolf3d_t *wolf3d)
 {
+	if (!(wolf3d = (t_wolf3d_t *)malloc(sizeof(t_wolf3d_t))))
+	{
+		free(wolf3d);
+		wolf3d->quit = 1;
+		return (*wolf3d);
+	}
+	ft_bzero(wolf3d, sizeof(t_wolf3d_t));
 	if (ac == 2)
 		wolf3d->fname = av[1];
 	else if (ac == 1)
@@ -22,15 +29,9 @@ void	init_program(int ac, char **av, t_wolf3d_t *wolf3d)
 	{
 		ft_putendl_fd("usage : ./wolf3d [input_file]", 2);
 		wolf3d->quit = 1;
-		return ;
+		return (*wolf3d);
 	}
-	if (!(wolf3d = (t_wolf3d_t *)malloc(sizeof(t_wolf3d_t))))
-	{
-		free(wolf3d);
-		wolf3d->quit = 1;
-		return ;
-	}
-	ft_bzero(wolf3d, sizeof(t_wolf3d_t));
+	return (*wolf3d);
 }
 
 void	free_quit(t_wolf3d_t *w)
@@ -38,19 +39,14 @@ void	free_quit(t_wolf3d_t *w)
 	int i;
 
 	i = -1;
-	printf("E : %i\n", w->quit);
 	while (++i < 4 && w->screen.text_mandat[i])
 		SDL_DestroyTexture(w->screen.text_mandat[i]);
-	printf("F : %i\n", w->quit);
 	if (w->screen.renderer)
 		SDL_DestroyRenderer(w->screen.renderer);
-	printf("G : %i\n", w->quit);
 	if (w->screen.win)
 		SDL_DestroyWindow(w->screen.win);
-	printf("H : %i\n", w->quit);
 	IMG_Quit();
 	SDL_Quit();
-	printf("I : %i\n", w->quit);
 }
 
 int		main(int ac, char **av)
@@ -58,7 +54,7 @@ int		main(int ac, char **av)
 	t_wolf3d_t	wolf3d;
 	SDL_Event	event;
 
-	init_program(ac, av, &wolf3d);
+	wolf3d = init_program(ac, av, &wolf3d);
 	!wolf3d.quit ? manage_file(ac, &wolf3d) : free_quit(&wolf3d);
 	if (!wolf3d.quit)
 		wolf3d.quit = manage_sdl_init(&wolf3d);

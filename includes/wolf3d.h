@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:32:10 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/31 17:31:53 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/01 14:51:45 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void				rendering(t_wolf3d_t *wolf3d);
 void				raycaster(t_wolf3d_t *wolf3d);
 
 void				draw_texture(t_wolf3d_t *wolf3d, SDL_Point point);
+void				draw_objects(t_wolf3d_t *wolf3d, SDL_Point point, int text_v);
 
 void				wolf3d_events(t_wolf3d_t *wolf3d, SDL_Event *event);
 

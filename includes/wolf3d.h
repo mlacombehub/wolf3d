@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:32:10 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/29 20:49:17 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/31 17:31:53 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,12 @@ typedef struct		s_screen
 	SDL_TimerID		start_timeout;
 	SDL_Texture		*text_mandat[4];
 	SDL_Rect		mandat_size[4];
-	SDL_Texture		*text_walls[6];
-	SDL_Rect		walls_size[6];
 	SDL_Texture		*text_objects[6];
+	SDL_Rect		objects_size[6];
 	SDL_Texture		*text_chests[6];
+	SDL_Rect		chests_size[6];
 	SDL_Texture		*text_decors[6];
+	SDL_Rect		decors_size[6];
 }					t_screen_t;
 
 typedef struct		s_rayc

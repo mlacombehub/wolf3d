@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/25 12:50:17 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/29 20:47:14 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/31 17:00:57 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,14 @@ int	ft_open_close_fd(char *doc)
 	char		res_b[13];
 	int			i;
 
-	if ((fd.x = open(doc, O_RDONLY)) < 0)
+	fd = (t_point_t){open(doc, O_RDONLY), open(doc, O_RDONLY)};
+	if (fd.x < 0 || fd.y < 0)
 	{
 		ft_putendl_fd("Problem opening file", 2);
 		return (0);
 	}
 	res_a[0] = (char)read(fd.x, res_a, 13);
 	close(fd.x);
-	if ((fd.y = open(doc, O_RDONLY)) < 0)
-	{
-		ft_putendl_fd("Problem opening file", 2);
-		return (0);
-	}
 	res_b[0] = (char)read(fd.y, res_b, 13);
 	close(fd.y);
 	i = 0;

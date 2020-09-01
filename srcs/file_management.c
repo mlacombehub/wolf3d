@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:34:47 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/29 20:17:13 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/31 16:07:54 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static char	*wolf3d_reallocfile(int fd)
 	char		buff[BUFF_FILE + 1];
 	char		*tmp;
 	char		*result;
-	int			readres;
+	size_t		readres;
 
 	ft_bzero(buff, BUFF_FILE + 1);
 	n = 0;
@@ -81,6 +81,8 @@ static char	*wolf3d_reallocfile(int fd)
 		free(result);
 		result = tmp;
 		ft_bzero(buff, BUFF_FILE + 1);
+		if (result[ft_strlen(result)] == 0 || ft_strlen(result) > 100000)
+			break ;
 	}
 	if (n != 0 && readres >= 0)
 		result[n] = '\0';
@@ -121,15 +123,13 @@ void		manage_file(int ac, t_wolf3d_t *w)
 	int		fd;
 
 	fd = 0;
-	if (ac > 2 || ((fd = open(w->fname, O_RDONLY)) == -1)
-		|| (ac != 1 && ft_open_close_fd(w->fname) == 0))
+	fd = open(w->fname, O_RDONLY);
+	if (ac > 2 || fd == -1 || read(fd, NULL, 0) < 0)
 	{
 		ft_putendl_fd("problem reading file, please use a valid file", 2);
 		w->quit = 2;
 		return ;
 	}
-	if (read(fd, NULL, 0) == -1)
-		return ;
 	raw_map = wolf3d_reallocfile(fd);
 	wolf3d_countlines(w, raw_map);
 	if (w->quit != 0)

@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:38:24 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/29 20:37:01 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/08/31 20:47:35 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,34 +37,36 @@ void	pos_origin(t_wolf3d_t *w, t_token_t **tok)
 	{
 		p.x = -1;
 		while (++p.x <= w->file.line_len[p.y])
-			if (tok[p.y][p.x].orig && tok[p.y][p.x].cross)
-			{
+			if (!tok[p.y][p.x].type && tok[p.y][p.x].cross && tok[p.y][p.x].orig && !tok[p.y][p.x].pick)
 				w->origin = (t_vec2_t){p.x, p.y};
-				tok[p.y][p.x].orig = 0;
-			}
-			else if (tok[p.y][p.x].orig && !tok[p.y][p.x].cross)
+			else if (!tok[p.y][p.x].cross && tok[p.y][p.x].orig)
 				view = p;
 	}
-	if (w->origin.x == -1 || view.x == -1)
+	printf("%.1f %.1f | %i %i | %i\n", w->origin.x, w->origin.y, view.x, view.y, tok[p.y - 1][p.x - 1].cross);
+	if ((w->origin.x == 0 && w->origin.y == 0) || view.x == -1)
 	{
-		p = (t_point_t){w->file.line_len[p.y - 1] - 1, p.y - 1};
-		while (p.x >= 0 && p.y >= 0 && !tok[p.y][p.x].cross)
+		p = (t_point_t){-1, -1};
+		while (++p.y < w->file.nb_line && !tok[p.y][p.x].cross)
 		{
-			if (w->origin.x == -1)
-				w->origin = (t_vec2_t){p.x, p.y};
-			else if (view.x == -1)
-				view = (t_point_t){w->origin.x, w->origin.y};
-			p.x == 0 ? p.x == w->file.line_len[--p.y] : p.x--;
+			p.x = -1;
+			while (++p.x <= w->file.line_len[p.y] && !tok[p.y][p.x].cross)
+			{
+				if (w->origin.x == 0 && w->origin.y == 0)
+					w->origin = (t_vec2_t){p.x, p.y};
+				if (view.x == 0 && view.y == 0)
+					view = (t_point_t){w->origin.x, w->origin.y};
+				printf("%d %d | %i %i\n", p.x, p.y, view.x, view.y);
+			}
 		}
-		if (p.y == -1)
+		if (p.y == -1 || (p.x == 0 && p.y == 0))
 		{
 			ft_putendl_fd("File is not containing crossable fields\n", 2);
 			w->quit = 8;
 			return ;
 		}
 	}
-	if (w->origin.x == view.x && w->origin.y == view.y)
-		view.y -= 0.5;
+	if ((w->origin.x == view.x && w->origin.y == view.y))
+		view.y += 0.5;
 	w->angle_view = angle_view(w->origin, view);
 }
 

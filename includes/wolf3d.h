@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:32:10 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/09/01 14:51:45 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/04 14:10:28 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 # include <SDL.h>
 # include <SDL_ttf.h>
 # include <SDL_image.h>
+# include "xpm/walls.xpm"
+# include "xpm/objects.xpm"
+# include "xpm/chests.xpm"
+# include "xpm/decors.xpm"
 
 # define BUFF_FILE  4095
 
@@ -53,14 +57,14 @@ typedef struct		s_screen
 	SDL_Renderer	*renderer;
 	SDL_DisplayMode	mode;
 	SDL_TimerID		start_timeout;
-	SDL_Texture		*text_mandat[4];
-	SDL_Rect		mandat_size[4];
-	SDL_Texture		*text_objects[6];
-	SDL_Rect		objects_size[6];
-	SDL_Texture		*text_chests[6];
-	SDL_Rect		chests_size[6];
-	SDL_Texture		*text_decors[6];
-	SDL_Rect		decors_size[6];
+	SDL_Texture		*text_walls[4];
+	SDL_Rect		walls_size[4];
+	SDL_Texture		*text_objects[8];
+	SDL_Rect		objects_size[8];
+	SDL_Texture		*text_chests[8];
+	SDL_Rect		chests_size[8];
+	SDL_Texture		*text_decors[8];
+	SDL_Rect		decors_size[8];
 }					t_screen_t;
 
 typedef struct		s_rayc
@@ -70,6 +74,7 @@ typedef struct		s_rayc
 	t_vec2_t		pos;
 	double			offset;
 	char			block;
+	char			sprite;
 	int				orient;
 
 }					t_rayc_t;
@@ -109,7 +114,7 @@ void				rendering(t_wolf3d_t *wolf3d);
 void				raycaster(t_wolf3d_t *wolf3d);
 
 void				draw_texture(t_wolf3d_t *wolf3d, SDL_Point point);
-void				draw_objects(t_wolf3d_t *wolf3d, SDL_Point point, int text_v);
+void				draw_decors(t_wolf3d_t *wolf3d, SDL_Point point, int text_v);
 
 void				wolf3d_events(t_wolf3d_t *wolf3d, SDL_Event *event);
 

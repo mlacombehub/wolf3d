@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:31:11 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/09/01 12:29:18 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/04 14:01:17 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,26 @@ t_wolf3d_t	init_program(int ac, char **av, t_wolf3d_t *wolf3d)
 	return (*wolf3d);
 }
 
-void	free_quit(t_wolf3d_t *w)
+void		free_quit(t_wolf3d_t *w)
 {
 	int i;
 
 	i = -1;
-	while (++i < 4 && w->screen.text_mandat[i])
-		SDL_DestroyTexture(w->screen.text_mandat[i]);
+	while (++i < 4 && w->screen.text_walls[i])
+		SDL_DestroyTexture(w->screen.text_walls[i]);
+	i = -1;
+	while (++i < 6 && w->screen.text_objects[i])
+		SDL_DestroyTexture(w->screen.text_objects[i]);
 	if (w->screen.renderer)
 		SDL_DestroyRenderer(w->screen.renderer);
 	if (w->screen.win)
 		SDL_DestroyWindow(w->screen.win);
 	IMG_Quit();
 	SDL_Quit();
+	w->quit ? ft_putendl_nbr_fd(w->quit, 2) : 0;
 }
 
-int		main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	t_wolf3d_t	wolf3d;
 	SDL_Event	event;
@@ -62,20 +66,6 @@ int		main(int ac, char **av)
 		free_quit(&wolf3d);
 	!wolf3d.quit ? player_pos(&wolf3d) : free_quit(&wolf3d);
 	while (!wolf3d.quit)
-	{
-		if (wolf3d.keys[SDL_SCANCODE_ESCAPE])
-			wolf3d.quit = 42;
-		SDL_SetRenderDrawColor(wolf3d.screen.renderer, 40, 30, 30, 255);
-		SDL_RenderClear(wolf3d.screen.renderer);
-		SDL_SetRenderDrawColor(wolf3d.screen.renderer, 20, 75, 80, 255);
-		SDL_RenderFillRect(wolf3d.screen.renderer, &(SDL_Rect){0, 0,
-							wolf3d.screen.mode.w, wolf3d.screen.mode.h / 2});
-		raycaster(&wolf3d);
-		SDL_RenderPresent(wolf3d.screen.renderer);
-		hook(&wolf3d);
-		SDL_Delay(50);
-		while (SDL_PollEvent(&event))
-			wolf3d_events(&wolf3d, &event);
-	}
+		wolf3d_events(&wolf3d, &event);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:34:47 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/31 16:07:54 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/04 14:00:35 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,25 @@
 static void	wolf3d_countlines(t_wolf3d_t *wolf3d, char *str)
 {
 	wolf3d->file.nb_line = 0;
-	while (*str)
-	{
-		if (*str == '\n')
-			wolf3d->file.nb_line++;
-		str++;
-	}
-	if (*--str && !ft_isspace(*str) && *str != '\n')
-		wolf3d->file.nb_line++;
-	if (!(wolf3d->file.line_len = (int *)malloc(
-		sizeof(*wolf3d->file.line_len) * (wolf3d->file.nb_line + 1))))
-	{
-		free(wolf3d->file.line_len);
+	if (str == NULL)
 		wolf3d->quit = 4;
-		return ;
+	else
+	{
+		while (*str)
+		{
+			if (*str == '\n')
+				wolf3d->file.nb_line++;
+			str++;
+		}
+		if (*--str && !ft_isspace(*str) && *str != '\n')
+			wolf3d->file.nb_line++;
+		if (wolf3d->file.nb_line == 0 || !(wolf3d->file.line_len =
+			(int *)malloc(sizeof(*wolf3d->file.line_len)
+			* (wolf3d->file.nb_line + 1))))
+		{
+			free(wolf3d->file.line_len);
+			wolf3d->quit = 4;
+		}
 	}
 }
 
@@ -62,25 +67,23 @@ static void	wolf3d_countcolumns(t_wolf3d_t *w, char *str)
 
 static char	*wolf3d_reallocfile(int fd)
 {
-	long long	n;
-	char		buff[BUFF_FILE + 1];
-	char		*tmp;
-	char		*result;
-	size_t		readres;
+	int		n;
+	char	buff[BUFF_FILE];
+	char	tmp[100000];
+	char	*result;
+	int		readres;
 
-	ft_bzero(buff, BUFF_FILE + 1);
+	ft_bzero(buff, BUFF_FILE);
 	n = 0;
 	result = NULL;
 	while ((readres = read(fd, buff, BUFF_FILE)) > 0)
 	{
-		if (!(tmp = (char *)malloc(sizeof(tmp) * (n + readres + 1))))
-			ft_free_return(tmp);
 		ft_memmove(tmp, result, n);
 		ft_memmove(tmp + n, buff, readres);
 		n += readres;
 		free(result);
 		result = tmp;
-		ft_bzero(buff, BUFF_FILE + 1);
+		ft_bzero(buff, BUFF_FILE);
 		if (result[ft_strlen(result)] == 0 || ft_strlen(result) > 100000)
 			break ;
 	}
@@ -98,8 +101,8 @@ static void	transl_file(t_wolf3d_t *w, char *raw_map)
 	{
 		if (w->quit != 0)
 			return ;
-		if (!(w->map[p.y] = (t_token_t *)malloc(sizeof(*w->map[p.y])
-								* (w->file.line_len[p.y] + 1))))
+		if (!(w->map[p.y] = malloc(sizeof(t_token_t **)
+				* ((w->file.line_len[p.y] + 1)))))
 		{
 			free(w->map[p.y]);
 			w->quit = 6;

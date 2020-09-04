@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:38:19 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/08/31 20:05:16 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/04 14:24:09 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,22 @@
 
 void	wolf3d_events(t_wolf3d_t *w, SDL_Event *event)
 {
-	if (event->type == SDL_KEYUP)
-		w->keys[event->key.keysym.scancode] = 0;
-	else if (event->type == SDL_KEYDOWN)
-		w->keys[event->key.keysym.scancode] = 1;
+	if (w->keys[SDL_SCANCODE_ESCAPE])
+		w->quit = 42;
+	SDL_SetRenderDrawColor(w->screen.renderer, 40, 30, 30, 255);
+	SDL_RenderClear(w->screen.renderer);
+	SDL_SetRenderDrawColor(w->screen.renderer, 20, 75, 80, 255);
+	SDL_RenderFillRect(w->screen.renderer, &(SDL_Rect){0, 0,
+						w->screen.mode.w, w->screen.mode.h / 2});
+	raycaster(w);
+	SDL_RenderPresent(w->screen.renderer);
+	hook(w);
+	SDL_Delay(50);
+	while (SDL_PollEvent(event))
+		if (event->type == SDL_KEYUP)
+			w->keys[event->key.keysym.scancode] = 0;
+		else if (event->type == SDL_KEYDOWN)
+			w->keys[event->key.keysym.scancode] = 1;
 }
 
 void	hook(t_wolf3d_t *w)
@@ -43,8 +55,4 @@ void	hook(t_wolf3d_t *w)
 		< w->file.line_len[(int)w->pos.y])
 		if (w->map[(int)w->pos.y][(int)new_p.x].cross == 1)
 			w->pos.x = new_p.x;
-	if (!w->mandat && w->keys[SDL_SCANCODE_P])
-		w->mandat = 1;
-	else if (w->mandat && w->keys[SDL_SCANCODE_P])
-		w->mandat = 0;
 }

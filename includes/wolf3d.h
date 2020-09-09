@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:32:10 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/09/04 14:10:28 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/08 18:58:52 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,10 @@
 # include "libft.h"
 # include <fcntl.h>
 # include <stdlib.h>
-# include <stdio.h>
 # include <math.h>
 # include <SDL.h>
-# include <SDL_ttf.h>
 # include <SDL_image.h>
 # include "xpm/walls.xpm"
-# include "xpm/objects.xpm"
-# include "xpm/chests.xpm"
-# include "xpm/decors.xpm"
 
 # define BUFF_FILE  4095
 
@@ -53,30 +48,25 @@ typedef struct		s_token
 
 typedef struct		s_screen
 {
+	SDL_Texture		*text_walls[4];
 	SDL_Window		*win;
 	SDL_Renderer	*renderer;
 	SDL_DisplayMode	mode;
 	SDL_TimerID		start_timeout;
-	SDL_Texture		*text_walls[4];
 	SDL_Rect		walls_size[4];
-	SDL_Texture		*text_objects[8];
-	SDL_Rect		objects_size[8];
-	SDL_Texture		*text_chests[8];
-	SDL_Rect		chests_size[8];
-	SDL_Texture		*text_decors[8];
-	SDL_Rect		decors_size[8];
+	char			ending[4];
 }					t_screen_t;
 
 typedef struct		s_rayc
 {
-	double			dist;
 	t_vec2_t		text;
 	t_vec2_t		pos;
+	double			dist;
 	double			offset;
+	int				orient;
 	char			block;
 	char			sprite;
-	int				orient;
-
+	char			ending[2];
 }					t_rayc_t;
 
 typedef struct		s_file
@@ -91,15 +81,16 @@ typedef struct		s_wolf3d
 	t_screen_t		screen;
 	t_token_t		**map;
 	t_vec2_t		origin;
+	t_point_t		view;
 	t_vec2_t		pos;
 	t_file_t		file;
 	t_rayc_t		ray;
 	int				keys[SDL_NUM_SCANCODES];
 	long double		*picture;
-	double			angle_view;
+	double			a_view;
 	double			fov;
 	char			*fname;
-	int				mandat;
+	int				draw_m;
 	int				quit;
 }					t_wolf3d_t;
 
@@ -114,10 +105,7 @@ void				rendering(t_wolf3d_t *wolf3d);
 void				raycaster(t_wolf3d_t *wolf3d);
 
 void				draw_texture(t_wolf3d_t *wolf3d, SDL_Point point);
-void				draw_decors(t_wolf3d_t *wolf3d, SDL_Point point, int text_v);
 
 void				wolf3d_events(t_wolf3d_t *wolf3d, SDL_Event *event);
-
-void				hook(t_wolf3d_t *wolf3d);
 
 #endif

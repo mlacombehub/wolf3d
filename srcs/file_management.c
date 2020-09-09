@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:34:47 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/09/04 14:00:35 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/09 04:12:28 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,13 @@ static void	wolf3d_countlines(t_wolf3d_t *wolf3d, char *str)
 	else
 	{
 		while (*str)
-		{
-			if (*str == '\n')
+			if (*str++ == '\n')
 				wolf3d->file.nb_line++;
-			str++;
-		}
-		if (*--str && !ft_isspace(*str) && *str != '\n')
+		str--;
+		if (*str && !ft_isspace(*str) && *str != '\n')
 			wolf3d->file.nb_line++;
 		if (wolf3d->file.nb_line == 0 || !(wolf3d->file.line_len =
-			(int *)malloc(sizeof(*wolf3d->file.line_len)
-			* (wolf3d->file.nb_line + 1))))
+			(int *)malloc(sizeof(int) * (wolf3d->file.nb_line + 1))))
 		{
 			free(wolf3d->file.line_len);
 			wolf3d->quit = 4;
@@ -57,15 +54,9 @@ static void	wolf3d_countcolumns(t_wolf3d_t *w, char *str)
 		}
 		str++;
 	}
-	if (!(w->map = (t_token_t **)malloc(sizeof(*w->map) * w->file.nb_line)))
-	{
-		free(w->map);
-		w->quit = 5;
-		return ;
-	}
 }
 
-static char	*wolf3d_reallocfile(int fd)
+static char	*wolf3d_fd_to_char(int fd)
 {
 	int		n;
 	char	buff[BUFF_FILE];
@@ -96,25 +87,26 @@ static void	transl_file(t_wolf3d_t *w, char *raw_map)
 {
 	t_point_t	p;
 
-	p = (t_point_t) {0, 0};
+	p = (t_point_t) {0};
+	if (!(w->map = (t_token_t **)malloc(sizeof(struct t_token_t*)
+					* (w->file.nb_line + 1))))
+	{
+		free(w->map);
+		w->quit = 5;
+		return ;
+	}
 	while (p.y < w->file.nb_line)
 	{
-		if (w->quit != 0)
-			return ;
-		if (!(w->map[p.y] = malloc(sizeof(t_token_t **)
-				* ((w->file.line_len[p.y] + 1)))))
+		if (!(w->map[p.y] = (t_token_t *)malloc(w->file.line_len[p.y] + 1)))
 		{
 			free(w->map[p.y]);
 			w->quit = 6;
 			return ;
 		}
-		while (*raw_map && *raw_map != '\n')
-			w->map[p.y][p.x++] = *(t_token_t *)raw_map++;
-		if (*raw_map && *raw_map == '\n')
-		{
+		while (p.x < w->file.line_len[p.y])
+			w->map[p.y][++p.x] = *(t_token_t *)raw_map++;
+		if (*raw_map && *raw_map++ == '\n')
 			p = (t_point_t){0, ++p.y};
-			++raw_map;
-		}
 		if (*raw_map == '\0')
 			break ;
 	}
@@ -133,7 +125,7 @@ void		manage_file(int ac, t_wolf3d_t *w)
 		w->quit = 2;
 		return ;
 	}
-	raw_map = wolf3d_reallocfile(fd);
+	raw_map = wolf3d_fd_to_char(fd);
 	wolf3d_countlines(w, raw_map);
 	if (w->quit != 0)
 		return ;

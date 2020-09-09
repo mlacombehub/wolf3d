@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:31:11 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/09/04 14:01:17 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/09 03:25:20 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_wolf3d_t	init_program(int ac, char **av, t_wolf3d_t *wolf3d)
 {
-	if (!(wolf3d = (t_wolf3d_t *)malloc(sizeof(t_wolf3d_t))))
+	if (!(wolf3d = (t_wolf3d_t *)malloc(sizeof(t_wolf3d_t) + 1)))
 	{
 		free(wolf3d);
 		wolf3d->quit = 1;
@@ -41,9 +41,6 @@ void		free_quit(t_wolf3d_t *w)
 	i = -1;
 	while (++i < 4 && w->screen.text_walls[i])
 		SDL_DestroyTexture(w->screen.text_walls[i]);
-	i = -1;
-	while (++i < 6 && w->screen.text_objects[i])
-		SDL_DestroyTexture(w->screen.text_objects[i]);
 	if (w->screen.renderer)
 		SDL_DestroyRenderer(w->screen.renderer);
 	if (w->screen.win)

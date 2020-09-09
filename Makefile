@@ -6,7 +6,7 @@
 #    By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/12 14:31:24 by mlacombe          #+#    #+#              #
-#    Updated: 2020/09/04 13:52:58 by mlacombe         ###   ########.fr        #
+#    Updated: 2020/09/09 03:55:03 by mlacombe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +15,10 @@ NAME			=wolf3d
 
 # compiler
 CC				=gcc
-override CFLAGS	+=-Wall -Wextra -g3
+override CFLAGS	+=-Wall -Wextra -Werror -g3
 OBJ				=$(addprefix $(OBJ_DIR),$(SRC:.c=.o))
 DEP				=$(addprefix $(OBJ_DIR),$(SRC:.c=.d))
-FRAMEWORK		= SDL2 SDL2_ttf SDL2_image
+FRAMEWORK		= SDL2 SDL2_image
 FRAMEWORK_PATH	= frameworks
 INCLUDE			=$(INC_DIR:%=-I %) $(FRAMEWORK:%=-I $(FRAMEWORK_PATH)/%.framework/Headers/)
 

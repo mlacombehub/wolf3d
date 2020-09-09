@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/23 16:10:50 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/09/04 16:17:40 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/09 03:27:49 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ void	dda_ray(t_wolf3d_t *w, t_vec2_t step, t_vec2_t dist)
 			w->ray.pos.y += step.y;
 			w->ray.orient = 1;
 		}
-		if (w->ray.pos.y < 0 || w->file.nb_line <= w->ray.pos.y ||
-			w->ray.pos.x < 0 || w->file.max_len <= w->ray.pos.x)
+		if (w->ray.pos.y < 0 || w->file.nb_line <= w->ray.pos.y
+				|| w->ray.pos.x < 0
+				|| w->file.line_len[(int)w->ray.pos.y] <= w->ray.pos.x)
 			w->ray.block = -1;
-		else if (!(w->map[(int)w->ray.pos.y][(int)w->ray.pos.x].type))
+		else
 			w->ray.block = !w->map[(int)w->ray.pos.y][(int)w->ray.pos.x].cross;
 	}
 }
@@ -56,14 +57,11 @@ void	init_step_ray(t_wolf3d_t *w, t_vec2_t *step, t_vec2_t *dist)
 		dist->y = (w->ray.pos.y + 1.0 - w->pos.y) * delta.y;
 }
 
-void	raylaunch(t_wolf3d_t *w, double angle)
+void	raylaunch(t_wolf3d_t *w)
 {
 	t_vec2_t	step;
 	t_vec2_t	dist;
 
-	w->ray.text = (t_vec2_t){cos(angle), sin(angle)};
-	w->ray.pos = (t_vec2_t){(int)w->pos.x, (int)w->pos.y};
-	w->ray.block = 0;
 	init_step_ray(w, &step, &dist);
 	dda_ray(w, step, dist);
 	if (w->ray.orient == 0)
@@ -85,58 +83,21 @@ void	raylaunch(t_wolf3d_t *w, double angle)
 	w->ray.offset -= floor(w->ray.offset);
 }
 
-void	spritecast(t_wolf3d_t *w, double angle)
-{
-	t_vec2_t	dist;
-	t_vec2_t	delta;
-	t_vec2_t	step;
-
-	w->ray.text = (t_vec2_t){cos(angle), sin(angle)};
-	w->ray.pos = (t_vec2_t){(int)w->pos.x, (int)w->pos.y};
-	w->ray.sprite = 0;
-	step.x = w->ray.text.x < 0 ? -1 : 1;
-	step.y = w->ray.text.y < 0 ? -1 : 1;
-	delta = (t_vec2_t){fabs(w->ray.text.x), fabs(w->ray.text.y)};
-	dist.x = (w->pos.x - w->ray.pos.x) * delta.x;
-	dist.y = (w->pos.y - w->ray.pos.y) * delta.y;
-	while (w->ray.sprite == 0)
-	{
-		if (dist.x < dist.y)
-		{
-			dist.x += delta.x;
-			w->ray.pos.x += step.x;
-			w->ray.orient = 0;
-		}
-		else
-		{
-			dist.y += delta.y;
-			w->ray.pos.y += step.y;
-			w->ray.orient = 1;
-		}
-		if (w->ray.pos.y < 0 || w->file.nb_line <= w->ray.pos.y ||
-			w->ray.pos.x < 0 || w->file.max_len <= w->ray.pos.x)
-			w->ray.sprite = -1;
-		else if (w->map[(int)w->ray.pos.y][(int)w->ray.pos.x].type == 1)
-			w->ray.sprite = w->map[(int)w->ray.pos.y][(int)w->ray.pos.x].text_a
-			+ w->map[(int)w->ray.pos.y][(int)w->ray.pos.x].text_b * 2
-			+ w->map[(int)w->ray.pos.y][(int)w->ray.pos.x].text_c * 4;
-	}
-}
-
 void	raycaster(t_wolf3d_t *w)
 {
-	int			i;
-	double		wall_h;
-	double		objects_h;
+	int		i;
+	double	wall_h;
+	double	angle;
 
 	i = -1;
 	while (++i < w->screen.mode.w)
 	{
-		raylaunch(w, w->picture[i] + w->angle_view - M_PI / 2);
+		angle = w->picture[i] + w->a_view - M_PI / 2;
+		w->ray.text = (t_vec2_t){cos(angle), sin(angle)};
+		w->ray.pos = (t_vec2_t){(int)w->pos.x, (int)w->pos.y};
+		w->ray.block = 0;
+		raylaunch(w);
 		wall_h = w->screen.mode.w / 1.6 / 4 / w->ray.dist / cos(w->picture[i]);
 		draw_texture(w, (SDL_Point){i, wall_h});
-		objects_h = w->screen.mode.w / 1.6 / 4 / w->ray.dist / cos(w->picture[i]);
-		spritecast(w, w->picture[i] + w->angle_view - M_PI / 2);
-		draw_decors(w, (SDL_Point){i, objects_h}, w->ray.sprite);
 	}
 }

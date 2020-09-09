@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/13 18:31:11 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/09/09 03:25:20 by mlacombe         ###   ########.fr       */
+/*   Updated: 2020/09/09 04:28:57 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ t_wolf3d_t	init_program(int ac, char **av, t_wolf3d_t *wolf3d)
 	{
 		ft_putendl_fd("usage : ./wolf3d [input_file]", 2);
 		wolf3d->quit = 1;
-		return (*wolf3d);
 	}
 	return (*wolf3d);
 }

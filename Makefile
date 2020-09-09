@@ -6,7 +6,7 @@
 #    By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/12 14:31:24 by mlacombe          #+#    #+#              #
-#    Updated: 2020/09/09 03:55:03 by mlacombe         ###   ########.fr        #
+#    Updated: 2020/09/09 04:39:48 by mlacombe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME			=wolf3d
 
 # compiler
 CC				=gcc
-override CFLAGS	+=-Wall -Wextra -Werror -g3
+override CFLAGS	+=-Wall -Wextra -g3
 OBJ				=$(addprefix $(OBJ_DIR),$(SRC:.c=.o))
 DEP				=$(addprefix $(OBJ_DIR),$(SRC:.c=.d))
 FRAMEWORK		= SDL2 SDL2_image
@@ -49,7 +49,7 @@ ifeq ($(shell uname 2>/dev/null),Linux) # LINUX
 endif
 
 all:
-	$(MAKE) $(NAME)
+	$(MAKE) -j $(NAME)
 
 $(NAME): $(OBJ) $(FT_LIB)
 	$(CC) $(CFLAGS) $(INCLUDE) $(FT_LNK) $(OBJ) -o $@ $(LIB)
@@ -82,4 +82,4 @@ re:
 
 FORCE:
 
-.PHONY : all clean fclean re FORCE
+.PHONY : all clean fclean re FORCE norm

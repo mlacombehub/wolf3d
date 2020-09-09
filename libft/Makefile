@@ -6,7 +6,7 @@
 #    By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/20 16:32:14 by mlacombe          #+#    #+#              #
-#    Updated: 2020/08/16 16:55:07 by mlacombe         ###   ########.fr        #
+#    Updated: 2020/09/09 04:36:05 by mlacombe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,6 @@ NAME = libft.a
 
 CC = gcc
 override CFLAGS += -Wall -Wextra -Werror
-#CFLAGS = -Wall -Wextra -Werror -fsanitize=address,undefined -g3
 ARFLAGS = rs
 
 SRC =	ft_bzero.c\
@@ -90,7 +89,6 @@ SRC =	ft_bzero.c\
 		ft_strnlen.c\
 		ft_min.c\
 		ft_max.c\
-		get_next_line.c\
 		ft_putendl_nbr.c\
 		ft_putendl_nbr_fd.c\
 		ft_power.c\

@@ -6,7 +6,7 @@
 /*   By: mlacombe <mlacombe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/14 14:34:47 by mlacombe          #+#    #+#             */
-/*   Updated: 2020/09/09 04:12:28 by mlacombe         ###   ########.fr       */
+/*   Updated: 2022/06/22 14:52:06 by mlacombe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	wolf3d_countlines(t_wolf3d_t *wolf3d, char *str)
 			free(wolf3d->file.line_len);
 			wolf3d->quit = 4;
 		}
+		// bonjour
 	}
 }
 
